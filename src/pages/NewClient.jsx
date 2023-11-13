@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable no-control-regex */
 import { useNavigate, Form, useActionData } from "react-router-dom";
 import Formulario from "../components/Formulario";
 import Error from "../components/Error";
