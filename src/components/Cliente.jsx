@@ -1,9 +1,15 @@
-import { useNavigate } from "react-router-dom";
-
 /* eslint-disable react/prop-types */
+import { Form, useNavigate, redirect } from "react-router-dom";
+import { deleteClient } from "../data/clientes";
+
+export async function action({ params }) {
+  deleteClient(params.id);
+  return redirect("/");
+}
+
 const Cliente = ({ cliente }) => {
-  const navigate = useNavigate()
-  const { nombre, empresa, email, telefono, id} = cliente;
+  const navigate = useNavigate();
+  const { nombre, empresa, email, telefono, id } = cliente;
   return (
     <tr className="border-b">
       <td className="p-5 space-y-1">
@@ -24,16 +30,26 @@ const Cliente = ({ cliente }) => {
         <button
           type="button"
           className="text-blue-600 hover:text-blue-700 uppercase font-bold text-xs"
-          onClick={()=> navigate(`/clientes/${id}/editar`)}
+          onClick={() => navigate(`/clientes/${id}/editar`)}
         >
           Editar
         </button>
-        <button
-          type="button"
-          className="text-red-600 hover:text-red-700 uppercase font-bold text-xs"
+        <Form
+          method="post"
+          action={`/clientes/${id}/eliminar`}
+          onSubmit={(e) => {
+            if (!confirm("¿Deseas eliminar este registro?")) {
+              e.preventDefault();
+            }
+          }}
         >
-          Eliminar
-        </button>
+          <button
+            type="submit"
+            className="text-red-600 hover:text-red-700 uppercase font-bold text-xs"
+          >
+            Eliminar
+          </button>
+        </Form>
       </td>
     </tr>
   );

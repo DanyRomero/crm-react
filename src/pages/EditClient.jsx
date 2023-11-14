@@ -1,6 +1,9 @@
-import { Form, useNavigate, useLoaderData } from "react-router-dom";
-import { getClient } from "../data/clientes";
+/* eslint-disable no-control-regex */
+/* eslint-disable react-refresh/only-export-components */
+import { Form, useNavigate, useLoaderData, redirect, useActionData } from "react-router-dom";
+import { getClient, updateClient } from "../data/clientes";
 import Formulario from "../components/Formulario";
+import Error from "../components/Error";
 
 export async function loader({ params }) {
   const client = await getClient(params.id);
@@ -9,10 +12,35 @@ export async function loader({ params }) {
   }
   return client;
 }
+export async function action({ request, params }) {
+  const formDat = await request.formData();
+  const datos = Object.fromEntries(formDat);
+  const email = formDat.get("email");
+
+  // validación
+  const errores = [];
+  if (Object.values(datos).includes("")) {
+    errores.push("Todos los campos son obligatorios");
+  }
+  let regex = new RegExp(
+    "([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(.[!#-'*+/-9=?A-Z^-~-]+)*|[[\t -Z^-~]*])"
+  );
+
+  if (!regex.test(email)) {
+    errores.push("El email no es válido");
+  }
+  //retornar si hay errores
+  if (Object.keys(errores).length) {
+    return errores;
+  }
+  await updateClient(params.id, datos);
+  return redirect("/");
+}
 
 const EditClient = () => {
   const client = useLoaderData();
   const navigate = useNavigate();
+  const errores = useActionData()
 
   return (
     <>
@@ -29,8 +57,8 @@ const EditClient = () => {
         </button>
       </div>
       <div className="bg-white shadow rounded-md md:w-w3/4 mx-auto px-5 py-10 mt-20">
-        {/* {errores?.length &&
-          errores.map((error, i) => <Error key={i}>{error}</Error>)} */}
+        {errores?.length &&
+          errores.map((error, i) => <Error key={i}>{error}</Error>)}
         <Form method="post" noValidate>
           <Formulario client={client} />
           <input

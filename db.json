@@ -1,11 +1,12 @@
 {
   "clientes": [
     {
-      "id": 1,
-      "nombre": "Juan",
-      "telefono": 102013313,
+      "nombre": "Juan Perez",
+      "empresa": "Codigo Con Juan",
       "email": "juan@juan.com",
-      "empresa": "Codigo Con Juan"
+      "telefono": "102013313",
+      "notas": "Aprender React",
+      "id": 1
     },
     {
       "id": 2,
@@ -34,14 +35,6 @@
       "telefono": 1398198938,
       "email": "pedro@juan.com",
       "empresa": "Codigo Con Juan"
-    },
-    {
-      "nombre": "Daniela",
-      "empresa": "Medical Minds",
-      "email": "danyrp45@gmail.com",
-      "telefono": "5551001862",
-      "notas": ":)",
-      "id": 6
     }
   ]
 }
